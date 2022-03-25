@@ -13,18 +13,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-    //USER ROUTES
+   
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
-// Route::group(['middleware' => ["auth"]], function(){
-//     Route::get('users-profile', [UserController::class, 'userProfile']);
-//     Route::get('logout', [UserController::class, 'logout']);
-// });
-
 
 Route::middleware('auth:sanctum')->group( function () {
-    Route::get('users-profile', [UserController::class, 'userProfile']);
+    //USERS
+    Route::get('users/profile', [UserController::class, 'userProfile']);
     Route::get('logout', [UserController::class, 'logout']);
+    Route::post('users/update', [UserController::class, 'update']);
     Route::get('users', [UserController::class, 'index']);
 });
 

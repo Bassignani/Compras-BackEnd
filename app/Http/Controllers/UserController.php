@@ -15,7 +15,6 @@ use Laravel\Sanctum\Sanctum;
 class UserController extends Controller
 {
     public function register(Request $request){ 
-
         $request->validate([
             'empresa_id' => 'integer',
             'name' => 'required|string|max:255',
@@ -27,9 +26,7 @@ class UserController extends Controller
             'telefono' => 'string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        
+        ]);        
         $user = new User();
         $user->empresa_id = $request->empresa_id;
         $user->name = $request->name;
@@ -41,17 +38,13 @@ class UserController extends Controller
         $user->telefono = $request->telefono;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-
-        $user->save();
-        
+        $user->save();     
         $data = array(
             'status'  => 'success',
             'code'    => 201,
             'message' => 'El usuario se ha creado correctamente',
-        );
-        
-       return response()->json($data);
-       
+        );   
+       return response()->json($data);  
     }
 
 
@@ -60,7 +53,6 @@ class UserController extends Controller
             'email' => 'required|email|',
             'password' => 'required',
         ]);
-
         $user = User::where("email", "=", $request->email)->first();
         if (isset($user->id)) {
             if(Hash::check($request->password, $user->password)){
@@ -70,6 +62,7 @@ class UserController extends Controller
                     'code' => 200,
                     'message' => 'Usuario logueado correctamente',
                     'access_token' => $token,
+                    'token_type' => 'Bearer',
                 );
             }else{
                 $data = array(
@@ -116,6 +109,7 @@ class UserController extends Controller
         return response()->json($users);
     } 
 
+
     
     public function update(Request $request){
         $request->validate([
@@ -128,6 +122,26 @@ class UserController extends Controller
             'direccion' => 'string|max:255',
             'telefono' => 'string|max:255',
         ]);
+        $user = new User(); 
+        $user = auth()->user();
+        unset($request->email);
+        unset($request->password);
+        unset($request->created_at);
+        $user->empresa_id = $request->empresa_id;
+        $user->name = $request->name;
+        $user->secondname = $request->secondname;
+        $user->lastname = $request->lastname;
+        $user->dni = $request->dni;
+        $user->cuil = $request->cuil;
+        $user->direccion = $request->direccion;
+        $user->telefono = $request->telefono;   
+        $user->save();
+        $data = array(
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Usuario actualizado correctamente',                
+        );
+        return response()->json($data);        
     }
 
 }

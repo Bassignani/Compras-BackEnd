@@ -111,7 +111,42 @@ class UserController extends Controller
 
 
     
-    public function update(Request $request){
+    public function update(Request $request,$id){
+        $request->validate([
+            'empresa_id' => 'integer',
+            'name' => 'required|string|max:255',
+            'secondname' => 'string|max:255',
+            'lastname' => 'required|string|max:255',
+            'dni' => 'required|string|max:255',
+            'cuil' => 'string|max:255',
+            'direccion' => 'string|max:255',
+            'telefono' => 'string|max:255',
+        ]);
+        // $user = new User(); 
+        // $user = auth()->user();
+        $user = User::find($id);
+        unset($request->email);
+        unset($request->password);
+        unset($request->created_at);
+        $user->empresa_id = $request->empresa_id;
+        $user->name = $request->name;
+        $user->secondname = $request->secondname;
+        $user->lastname = $request->lastname;
+        $user->dni = $request->dni;
+        $user->cuil = $request->cuil;
+        $user->direccion = $request->direccion;
+        $user->telefono = $request->telefono;   
+        $user->save();
+        $data = array(
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Usuario actualizado correctamente',                
+        );
+        return response()->json($data);        
+    }
+
+
+    public function edit(Request $request){
         $request->validate([
             'empresa_id' => 'integer',
             'name' => 'required|string|max:255',

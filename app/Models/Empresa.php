@@ -37,17 +37,3 @@ class Empresa extends Model
 }
 
 
-//Relación de muchos a uno, muchos post pueden ser creados por el mismo usuario
-//   public function user(){
-//     return $this->belongsTo('App\User', 'user_id');
-//   }
-
-//   //Relación de muchos a uno, muchos post pertenecen a una misma categotia
-//   public function category(){
-//     return $this->belongsTo('App\Category', 'category_id');
-//   }
-
-//Relacion de uno a N, un Cliente puede tener muchos contratos
-// public function contratos(){
-//     return $this->hasMany(Contrato::class, 'cliente_id');
-//   }

@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Empresa;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
-
-
+use Symfony\Component\HttpFoundation\Test\Constraint\ResponseFormatSame;
 
 class UserController extends Controller
 {
@@ -177,6 +177,35 @@ class UserController extends Controller
             'message' => 'Usuario actualizado correctamente',                
         );
         return response()->json($data);        
+    }
+
+
+    public function getUsersByEmpresaID($id){
+        $empresa = Empresa::find($id);
+        if (!is_null($empresa)) {
+            $users = User::wehre('empresa_id',$id)->first();
+            if (!is_null($users)) {
+                $users = User::wehre('empresa_id',$id)->get();
+                $data = [
+                    'status' => 'success',
+                    'code' => 200,
+                    'users' => $users,
+                ];
+            } else {
+                $data = [
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Usuarios no encontrados'
+                ];
+            }            
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada'
+            ];
+        }
+        return response()->json($data);
     }
 
 }

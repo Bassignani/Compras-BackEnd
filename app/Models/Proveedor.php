@@ -36,7 +36,7 @@ class Proveedor extends Model
         return $this->hasMany(ProveedorBanco::class, 'proveedor_id');
     }
 
-    public function bancos(){
+    public function notas(){
         return $this->hasMany(ProveedorNota::class, 'proveedor_id');
     }
 

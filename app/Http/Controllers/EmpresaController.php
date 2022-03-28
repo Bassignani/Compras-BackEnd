@@ -72,7 +72,7 @@ class EmpresaController extends Controller
             $data = array(
                 'status' => 'error',
                 'code' => 404,
-                'message' => 'No se ha encontrado la empresa',
+                'message' => 'Empresa no encontrada',
             );
         }
         return response()->json($data);
@@ -116,6 +116,86 @@ class EmpresaController extends Controller
         }
         return response()->json($data);
     }
+
+
+    public function getEmpresaByName($nombre){
+        $empresa = Empresa::where('nombre','Like','%'.$nombre.'%')->first();
+        if (!is_null($empresa)) {
+            $empresa = Empresa::where('nombre','Like','%'.$nombre.'%')->get();
+            $data = array(
+                'status' => 'success',
+                'code' => 200,
+                'empresa' => $empresa,
+            );
+        }else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada',
+            );
+        }
+        return response()->json($data);
+    } 
+
+
+    public function getEmpresaByCuit($cuit){
+        $empresa = Empresa::where('cuit','Like','%'.$cuit.'%')->first();
+        if (!is_null($empresa)) {
+            $empresa = Empresa::where('cuit','Like','%'.$cuit.'%')->get();
+            $data = array(
+                'status' => 'success',
+                'code' => 200,
+                'empresa' => $empresa,
+            );
+        }else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada',
+            );
+        }
+        return response()->json($data);
+    } 
+
+
+    public function getEmpresaByCode($codigo){
+        $empresa = Empresa::where('cuit','Like','%'.$codigo.'%')->first();
+        if (!is_null($empresa)) {
+            $empresa = Empresa::where('cuit','Like','%'.$codigo.'%')->get();
+            $data = array(
+                'status' => 'success',
+                'code' => 200,
+                'empresa' => $empresa,
+            );
+        }else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada',
+            );
+        }
+        return response()->json($data);
+    } 
+
+
+    public function getEmpresaByBusinessName($razon_social){
+        $empresa = Empresa::where('cuit','Like','%'.$razon_social.'%')->first();
+        if (!is_null($empresa)) {
+            $empresa = Empresa::where('cuit','Like','%'.$razon_social.'%')->get();
+            $data = array(
+                'status' => 'success',
+                'code' => 200,
+                'empresa' => $empresa,
+            );
+        }else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada',
+            );
+        }
+        return response()->json($data);
+    } 
 
 
     public function destroy($id)

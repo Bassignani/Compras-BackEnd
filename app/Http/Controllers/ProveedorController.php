@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
+use App\Models\ProveedorBanco;
+use App\Models\ProveedorNota;
 use Illuminate\Http\Request;
+
 
 class ProveedorController extends Controller
 {
@@ -153,4 +156,85 @@ class ProveedorController extends Controller
         }
         return response()->json($data);
     }
+
+    public function getProveedorByname($name){
+        $proveedor = Proveedor::where('nombre','Like','%'.$name.'%')->first();
+        if (!is_null($proveedor)) {
+            $proveedores = Proveedor::where('nombre','Like','%'.$name.'%')->get();
+            $data = [
+                'status' => 'success',
+                'code' => 200,
+                'rubros' => $proveedores,
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Proveedor no encontrado',
+            ];
+        }
+        return response()->json($data);
+    }
+
+
+    public function getBancosByProveedor($id){
+        $proveedor = Proveedor::find($id);
+        if (is_object($proveedor)) {
+            $bancos = $proveedor->bancos();
+            if (!is_null($bancos)) {
+                $data = [
+                    'status' => 'success',
+                    'code' => 200,
+                    'proveedor' => $proveedor,
+                    'bancos' => $bancos,
+                ];
+            } else {
+                $data  = [
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Bancos no encontradas'
+                ];
+            }
+        } else {
+            $data  = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Proveedor no encontrado'
+            ];
+        }
+        return response()->json($data);
+    }
+
+
+    public function getNotasByProveedor($id){
+        $proveedor = Proveedor::find($id);
+        if (is_object($proveedor)) {
+            $notas = $proveedor->notas();
+            if (!is_null($notas)) {
+                $data = [
+                    'status' => 'success',
+                    'code' => 200,
+                    'proveedor' => $proveedor,
+                    'notas' => $notas,
+                ];
+            } else {
+                $data  = [
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Notas no encontradas'
+                ];
+            }   
+        } else {
+            $data  = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Proveedor no encontrado'
+            ];
+        }
+        return response()->json($data);
+    }
+
+
+
+
 }

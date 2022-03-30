@@ -198,6 +198,93 @@ class EmpresaController extends Controller
     } 
 
 
+    public function getUsersByEmpresa($id){
+        $empresa = Empresa::find($id);
+        if (is_object($empresa)) {
+            $users = $empresa->users;
+            if (!is_null($users)) {
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'empresa' => $empresa,
+                    'users' => $users,
+                );    
+            } else {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Usuarios no encontrados',
+                );
+            }  
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada',
+            );
+        }
+        return response()->json($data);
+    }
+
+
+    public function getBancosByEmpresa($id){
+        $empresa = Empresa::find($id);    
+        if (is_object($empresa)) {
+            $bancos = $empresa->bancos;
+            if (!is_null($bancos)) {
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'empresa' => $empresa,
+                    'bancos' => $$bancos,
+                );    
+            } else {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Bancos no encontrados',
+                );
+            }  
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada',
+            );
+        }
+        return response()->json($data);
+    }
+
+
+    public function getPedidosByEmpresa($id){
+        $empresa = Empresa::find($id);
+        if (is_object($empresa)) {
+            $pedidos = $empresa->pedidos;
+            if (!is_null($empresa->pedidos)) {
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'empresa' => $empresa,
+                    'pedidos' => $pedidos,
+                );    
+            } else {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Pedidos no encontrados',
+                );
+            }  
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Empresa no encontrada',
+            );
+        }
+        return response()->json($data);
+    }
+
+
     public function destroy($id)
     {
         $empresa = Empresa::find($id);

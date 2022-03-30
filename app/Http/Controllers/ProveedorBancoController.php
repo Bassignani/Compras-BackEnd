@@ -7,58 +7,129 @@ use Illuminate\Http\Request;
 
 class ProveedorBancoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        $bancos = ProveedorBanco::all();
+        if (is_object($bancos)) {
+            $data = array(
+                'status' => 'success',
+                'code' => 200,
+                'bancos' => $bancos,
+            );
+        }else{
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Bancos no encontrados',
+            );
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'proveedor_id' => 'required',
+            'banco' => 'required|string|max:255',
+            'num_cuenta' => 'string|max:255',
+            'cbu' => 'string|max:255',
+            'tipo_cuenta' => 'string|max:255',
+            'alias' => 'string|max:255',
+            'descripcion' => 'string|max:255',
+        ]);
+        $banco = new ProveedorBanco(); 
+        $banco->proveedor_id = $request->proveedor_id;
+        $banco->banco = $request->banco;
+        $banco->num_cuenta = $request->num_cuenta;
+        $banco->cbu = $request->cbu;
+        $banco->tipo_cuenta = $request->tipo_cuenta;
+        $banco->alias = $request->alias;
+        $banco->descripcion = $request->descripcion;
+        $banco->save();
+        $data = [
+            'status' => 'success',
+            'code' => 201,
+            'message' => 'Banco creado correctamente',
+        ];
+        return response()->json($data);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ProveedorBanco  $proveedorBanco
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ProveedorBanco $proveedorBanco)
+    
+    public function show($id)
     {
-        //
+        $banco = ProveedorBanco::find($id);
+        if (is_object($banco)) {
+            $data = [
+                'status' => 'success',
+                'code' => 200,
+                'banco' => $banco, 
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Banco no encontrado', 
+            ];
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProveedorBanco  $proveedorBanco
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ProveedorBanco $proveedorBanco)
+  
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'proveedor_id' => 'proveedor_id',
+            'banco' => 'required|string|max:255',
+            'num_cuenta' => 'string|max:255',
+            'cbu' => 'string|max:255',
+            'tipo_cuenta' => 'string|max:255',
+            'alias' => 'string|max:255',
+            'descripcion' => 'string|max:255',
+        ]);
+        $banco = ProveedorBanco::find($id);
+        if (is_object($banco)) {
+            $banco->banco = $request->banco;
+            $banco->num_cuenta = $request->num_cuenta;
+            $banco->cbu = $request->cbu;
+            $banco->tipo_cuenta = $request->tipo_cuenta;
+            $banco->alias = $request->alias;
+            $banco->descripcion = $request->descripcion;
+            $banco->save();
+            $data = [
+                'status' => 'success',
+                'code' => 201,
+                'message' => 'Banco actualizado correctamente',
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Banco no encontrado',
+            ];
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ProveedorBanco  $proveedorBanco
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ProveedorBanco $proveedorBanco)
+
+    public function destroy($id)
     {
-        //
+        $banco = ProveedorBanco::find($id);
+        if (is_object($banco)) {
+            $banco->delete();
+            $data = [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Banco eliminado correctamente',
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Banco no encontrado',
+            ];
+        }
+        return response()->json($data);
     }
 }

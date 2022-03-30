@@ -24,7 +24,7 @@ class Empresa extends Model
 
     //Relacion uno a muchos
     public function users(){
-        return $this->hasMany(User::class, 'empresa_id');
+        return $this->hasMany(User::class,'empresa_id');
     }
 
     public function bancos(){

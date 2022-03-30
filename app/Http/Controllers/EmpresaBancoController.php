@@ -162,7 +162,36 @@ class EmpresaBancoController extends Controller
         return response()->json($data);
     }
 
-   
+
+    public function getEmpresaByBanco($id){
+        $banco = EmpresaBanco::find($id);
+        if (is_object($banco)) {
+            $empresa = $banco->empresa();
+            if (!is_null($empresa)) {
+                $data = [
+                    'status' => 'success',
+                    'code' => 200,
+                    'banco' => $banco,
+                    'empresa' => $empresa,
+                ];
+            } else {
+                $data = [
+                  'status' => 'error',
+                  'code' => 404,
+                  'message' => 'Proveedores no encontrados',   
+                ];
+            }
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Banco no encontrado',   
+              ];
+        }
+        return response()->json($data);
+    }
+
+    
     public function destroy($id)
     {
         $banco = EmpresaBanco::find($id);

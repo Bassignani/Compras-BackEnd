@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
-use App\Models\ProveedorBanco;
-use App\Models\ProveedorNota;
 use Illuminate\Http\Request;
 
 
@@ -180,7 +178,7 @@ class ProveedorController extends Controller
     public function getBancosByProveedor($id){
         $proveedor = Proveedor::find($id);
         if (is_object($proveedor)) {
-            $bancos = $proveedor->bancos();
+            $bancos = $proveedor->bancos;
             if (!is_null($bancos)) {
                 $data = [
                     'status' => 'success',
@@ -209,7 +207,7 @@ class ProveedorController extends Controller
     public function getNotasByProveedor($id){
         $proveedor = Proveedor::find($id);
         if (is_object($proveedor)) {
-            $notas = $proveedor->notas();
+            $notas = $proveedor->notas;
             if (!is_null($notas)) {
                 $data = [
                     'status' => 'success',
@@ -222,6 +220,34 @@ class ProveedorController extends Controller
                     'status' => 'error',
                     'code' => 404,
                     'message' => 'Notas no encontradas'
+                ];
+            }   
+        } else {
+            $data  = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Proveedor no encontrado'
+            ];
+        }
+        return response()->json($data);
+    }
+
+
+    public function getRubrosByProveedor($id){
+        $proveedor = Proveedor::find($id);
+        if (is_object($proveedor)) {
+            $rubros = $proveedor->rubros;
+            if (!is_null($rubros)) {
+                $data = [
+                    'status' => 'success',
+                    'code' => 200,
+                    'proveedor' => $proveedor,
+                ];
+            } else {
+                $data  = [
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'Rubros no encontradas'
                 ];
             }   
         } else {

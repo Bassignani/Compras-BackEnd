@@ -20,8 +20,8 @@ class SubPedido extends Model
     ];
 
     //Relacion muchos a muchos
-    public function Items() {
-        return $this->belongsToMany(Item::class);
+    public function items() {
+        return $this->belongsToMany(Item::class, 'item_sub_pedido');
     }
 
     //relacion muchos a uno
@@ -38,7 +38,7 @@ class SubPedido extends Model
         return $this->hasMany(Factura::class, 'subPedido_id');
     }
 
-    public function Notas(){
+    public function notas(){
         return $this->hasMany(SubPedidoNota::class, 'subPedido_id');
     }
 

@@ -18,7 +18,7 @@ class Rubro extends Model
 
     //Relacion muchos a muchos
     public function proveedores() {
-        return $this->belongsToMany(Proveedor::class , 'proveedor:rubro');
+        return $this->belongsToMany(Proveedor::class , 'proveedor_rubro');
     }
 
     //Relacion uno a muchos

@@ -54,6 +54,7 @@ class EmpresaBancoController extends Controller
             'status' => 'success',
             'code' => 201,
             'message' => 'Banco creado correctamente',
+            'banco' => $banco,
         ];
         return response()->json($data);
     }
@@ -143,10 +144,10 @@ class EmpresaBancoController extends Controller
         return response()->json($data);
     }
 
-    public function getBancoByName($name){
-        $banco = EmpresaBanco::where('banco','Like','%'.$name.'%')->first();
+    public function getBancoByName($name,$id){
+        $banco = EmpresaBanco::where('banco','Like','%'.$name.'%')->where('empresa_id',$id)->first();
         if (!is_null($banco)) {
-            $banco = EmpresaBanco::where('banco','Like','%'.$name.'%')->get();
+            $banco = EmpresaBanco::where('banco','Like','%'.$name.'%')->where('empresa_id',$id)->get();
             $data = [
                 'status' => 'success',
                 'code' => 200,
@@ -166,7 +167,7 @@ class EmpresaBancoController extends Controller
     public function getEmpresaByBanco($id){
         $banco = EmpresaBanco::find($id);
         if (is_object($banco)) {
-            $empresa = $banco->empresa();
+            $empresa = $banco->empresa;
             if (!is_null($empresa)) {
                 $data = [
                     'status' => 'success',

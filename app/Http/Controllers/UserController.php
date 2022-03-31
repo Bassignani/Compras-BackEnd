@@ -43,6 +43,7 @@ class UserController extends Controller
             'status'  => 'success',
             'code'    => 201,
             'message' => 'El usuario se ha creado correctamente',
+            'user' => $user,
         );   
        return response()->json($data);  
     }
@@ -209,13 +210,12 @@ class UserController extends Controller
     public function getPedidosCreadosByUser($id){
         $user = User::find($id);
         if (is_object($user)) {
-            $pedidos_creados = $user->pedidosCreados();
+            $pedidos_creados = $user->pedidosCreados;
             if (!is_null($pedidos_creados)) {
                 $data = [
                     'status' => 'success',
                     'code' => 200,
                     'user' => $user,
-                    'pedidos_creados' => $pedidos_creados,
                 ];  
             } else {
                 $data = [
@@ -238,13 +238,12 @@ class UserController extends Controller
     public function getPedidosRecibidosByUser($id){
         $user = User::find($id);
         if (is_object($user)) {
-            $pedidos_recibidos = $user->pedidosRecibidos();
+            $pedidos_recibidos = $user->pedidosRecibidos;
             if (!is_null($pedidos_recibidos)) {
                 $data = [
                     'status' => 'success',
                     'code' => 200,
                     'user' => $user,
-                    'pedidos_recibidos' => $pedidos_recibidos,
                 ];  
             } else {
                 $data = [
@@ -267,19 +266,18 @@ class UserController extends Controller
     public function getEmpresaByUser($id){
         $user = User::find($id);
         if (is_object($user)) {
-            $empresa = $user->empresa();
+            $empresa = $user->empresa;
             if (!is_null($empresa)) {
                 $data = [
                     'status' => 'success',
                     'code' => 200,
                     'user' => $user,
-                    'empresa' => $empresa,
                 ];  
             } else {
                 $data = [
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'Empresa no encontrad',
+                    'message' => 'Empresa no encontrada',
                 ];
             }            
         } else {

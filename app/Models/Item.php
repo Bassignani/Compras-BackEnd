@@ -32,6 +32,6 @@ class Item extends Model
 
     //Relacion muchos a muchos
     public function subPedidos() {
-        return $this->belongsToMany(SubPedido::class);
+        return $this->belongsToMany(SubPedido::class, 'item_sub_pedido');
     }
 }

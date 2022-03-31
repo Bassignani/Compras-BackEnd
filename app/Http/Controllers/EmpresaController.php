@@ -21,7 +21,7 @@ class EmpresaController extends Controller
             $data = array(
                 'status' => 'error',
                 'code' => 404,
-                'message' => 'No se han encontrado empresas',
+                'message' => 'Empresa no encontrada',
             );
         }
         return response()->json($data);
@@ -54,6 +54,7 @@ class EmpresaController extends Controller
             'status' => 'success',
             'code' => 201,
             'message' => 'Empresa creada correctamente',
+            'empresa' => $empresa,
         ]; 
         return response()->json($data);
     }
@@ -111,7 +112,7 @@ class EmpresaController extends Controller
             $data = array(
                 'status' => 'error',
                 'code' => 404,
-                'message' => 'No se ha encontrado la empresa',
+                'message' => 'Empresa no encontrada',
             );
         }
         return response()->json($data);
@@ -207,7 +208,6 @@ class EmpresaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'empresa' => $empresa,
-                    'users' => $users,
                 );    
             } else {
                 $data = array(
@@ -260,12 +260,11 @@ class EmpresaController extends Controller
         $empresa = Empresa::find($id);
         if (is_object($empresa)) {
             $pedidos = $empresa->pedidos;
-            if (!is_null($empresa->pedidos)) {
+            if (!is_null($pedidos)) {
                 $data = array(
                     'status' => 'success',
                     'code' => 200,
-                    'empresa' => $empresa,
-                    'pedidos' => $pedidos,
+                    'empresa' => $empresa,            
                 );    
             } else {
                 $data = array(
@@ -299,7 +298,7 @@ class EmpresaController extends Controller
             $data = array(
                 'status' => 'error',
                 'code' => 404,
-                'message' => 'No se ha encontrado la empresa',
+                'message' => 'Empresa no encontrada',
             );
         }
         return response()->json($data);

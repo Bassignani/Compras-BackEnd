@@ -7,58 +7,112 @@ use Illuminate\Http\Request;
 
 class SubPedidoNotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  
     public function index()
     {
-        //
+        $notas = SubPedidoNota::all();
+        if (is_object($notas)) {
+            $data = [
+                'status' => 'success',
+                'code' => 200,
+                'notas' => $notas,
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Nota no encontrada',
+            ];
+        }
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+  
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'proveedor_id' => 'required',
+            'nota' => 'required|string|max:255',
+        ]);
+        $nota = new SubPedidoNota(); 
+        $nota->subPedido_id = $request->subPedido_id;
+        $nota->descripcion = $request->descripcion;
+        $nota->save();
+        $data = [
+            'status' => 'success',
+            'code' => 201,
+            'message' => 'Nota creada correctamente',
+            'nota' => $nota,
+        ];
+        return response()->json($data);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\SubPedidoNota  $subPedidoNota
-     * @return \Illuminate\Http\Response
-     */
-    public function show(SubPedidoNota $subPedidoNota)
+    
+    public function show($id)
     {
-        //
+        $nota = SubPedidoNota::find($id);
+        if (is_object($nota)) {
+            $data = [
+                'status' => 'success',
+                'code' => 200,
+                'nota' => $nota, 
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Nota no encontrada', 
+            ];
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SubPedidoNota  $subPedidoNota
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, SubPedidoNota $subPedidoNota)
+
+   
+
+    public function update(Request $request,$id)
     {
-        //
+        $request->validate([
+            'subPedido_id' => 'subPedido_id',
+            'descripcion' => 'required|string|max:255',
+        ]);
+        $nota = SubPedidoNota::find($id);
+        if (is_object($nota)) {
+            $nota->descripcion = $request->descripcion;
+            $nota->save();
+            $data = [
+                'status' => 'success',
+                'code' => 201,
+                'message' => 'Nota actualizada correctamente',
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Nota no encontrada',
+            ];
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\SubPedidoNota  $subPedidoNota
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(SubPedidoNota $subPedidoNota)
+ 
+    public function destroy($id)
     {
-        //
+        $nota = SubPedidoNota::find($id);
+        if (is_object($nota)) {
+            $nota->delete();
+            $data = [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'NOta eliminada correctamente',
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'NOta no encontrada',
+            ];
+        }
+        return response()->json($data);
     }
 }

@@ -44,6 +44,7 @@ class RubroController extends Controller
             'status' => 'success',
             'code' => 201,
             'message' => 'Rubro creado correctamente', 
+            'rubro' => $rubro,
         ];
         return response()->json($data);
     }
@@ -140,13 +141,12 @@ class RubroController extends Controller
     public function getProveedoresByRubro($id){
         $rubro = Rubro::find($id);
         if (is_object($rubro)) {
-            $proveedores = $rubro->proveedores();
+            $proveedores = $rubro->proveedores;
             if (!is_null($proveedores)) {
                 $data = [
                     'status' => 'success',
                     'code' => 200,
                     'rubro' => $rubro,
-                    'proveedores' => $proveedores,
                 ];
             } else {
                 $data = [

@@ -41,6 +41,7 @@ class ProveedorNotaController extends Controller
             'status' => 'success',
             'code' => 201,
             'message' => 'Nota creada correctamente',
+            'nota' => $nota,
         ];
         return response()->json($data);
     }

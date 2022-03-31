@@ -2,14 +2,21 @@
 
 use App\Http\Controllers\EmpresaBancoController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemSubpedidoController;
+use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProveedorBancoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ProveedorNotaController;
+use App\Http\Controllers\ProveedorRubroController;
+use App\Http\Controllers\RemitoController;
 use App\Http\Controllers\RubroController;
+use App\Http\Controllers\SubPedidoController;
 use App\Http\Controllers\UserController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -58,7 +65,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('empresas/bancos/show/{id}', [EmpresaBancoController::class, 'show']);
     Route::put('empresas/bancos/update/{id}', [EmpresaBancoController::class, 'update']);
     Route::get('empresas/bancos/search-empresa/{id}', [EmpresaBancoController::class, 'getBancosByEmpresaID']);
-    Route::get('empresas/bancos/search-name/{name}', [EmpresaBancoController::class, 'getBancoByName']);
+    Route::get('empresas/bancos/search-name/{name}/{id}', [EmpresaBancoController::class, 'getBancoByName']);
     Route::delete('empresas/bancos/{id}', [EmpresaBancoController::class, 'destroy']);
     // Route::get('empresas/bancos/{id}', [EmpresaBancoController::class, 'getEmpresaByBanco']);
 
@@ -71,6 +78,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('proveedores/search-name/{name}', [ProveedorController::class, 'getProveedorByname']);
     Route::get('proveedores/bancos/{id}', [ProveedorController::class, 'getBancosByProveedor']);
     Route::get('proveedores/notas/{id}', [ProveedorController::class, 'getNotasByProveedor']);
+    Route::get('proveedores/rubros/{id}', [ProveedorController::class, 'getRubrosByProveedor']);
 
     //Proveedor Banco
     Route::post('proveedores/bancos/create', [ProveedorBancoController::class, 'store']);
@@ -94,6 +102,61 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::delete('rubros/{id}', [RubroController::class, 'destroy']);
     Route::get('rubros/search-name/{name}', [RubroController::class, 'getRubroByname']);
     Route::get('rubros/proveedores/{id}', [RubroController::class, 'getProveedoresByRubro']);
+
+    //Proveedor Rubro
+    Route::post('proveedor_rubro', [ProveedorRubroController::class, 'store']);
+
+    //Pedidos
+    Route::post('pedidos/create', [PedidoController::class, 'store']);
+    Route::get('pedidos/list', [PedidoController::class, 'index']);
+    Route::get('pedidos/show/{id}', [PedidoController::class, 'show']);
+    Route::put('pedidos/update/{id}', [PedidoController::class, 'update']);
+    Route::delete('pedidos/{id}', [PedidoController::class, 'destroy']);
+    Route::get('pedidos/items/{id}', [PedidoController::class, 'getItemsByPedido']);
+    Route::get('pedidos/sub-pedidos/{id}', [PedidoController::class, 'getSubPedidosByPedido']);
+    Route::get('pedidos/empresa/{id}', [PedidoController::class, 'getEmpresaByPedido']);
+    Route::get('pedidos/user-creador/{id}', [PedidoController::class, 'getUsuarioCreadorByPedido']);
+    Route::get('pedidos/user-recepcion/{id}', [PedidoController::class, 'getUsuarioRecepcionByPedido']);
+
+    //SubPedidos
+    Route::post('subpedidos/create', [SubPedidoController::class, 'store']);
+    Route::get('subpedidos/list', [SubPedidoController::class, 'index']);
+    Route::get('subpedidos/show/{id}', [SubPedidoController::class, 'show']);
+    Route::put('subpedidos/update/{id}', [SubPedidoController::class, 'update']);
+    Route::delete('subpedidos/{id}', [SubPedidoController::class, 'destroy']);
+    Route::get('subpedidos/items/{id}', [SubPedidoController::class, 'getItemsBySubPedido']);
+    Route::get('subpedidos/pedido/{id}', [SubPedidoController::class, 'getPedidoBySubPedido']);
+    Route::get('subpedidos/proveedor/{id}', [SubPedidoController::class, 'getProveedorBySubPedido']);
+    Route::get('subpedidos/facturas/{id}', [SubPedidoController::class, 'getFacturasBySubPedido']);
+    Route::get('subpedidos/notas/{id}', [SubPedidoController::class, 'getNotasBySubPedido']);
+    Route::get('subpedidos/remitos/{id}', [SubPedidoController::class, 'getRemitosBySubPedido']);
+
+    //Item Subpedido
+    Route::post('item_subpedido', [ItemSubpedidoController::class, 'store']);
+
+    //Items
+    Route::post('items/create', [ItemController::class, 'store']);
+    Route::get('items/list', [ItemController::class, 'index']);
+    Route::get('items/show/{id}', [ItemController::class, 'show']);
+    Route::put('items/update/{id}', [ItemController::class, 'update']);
+    Route::delete('items/{id}', [ItemController::class, 'destroy']);
+    Route::get('items/pedido/{id}', [ItemController::class, 'getPedidoByItem']);
+    Route::get('items/rubro/{id}', [ItemController::class, 'getRubroByItem']);
+    Route::get('items/subpedido/{id}', [ItemController::class, 'getSubPedidosByItem']);
+
+    //SubPedidos Notas
+    Route::post('subpedidos/notas/create', [ProveedorNotaController::class, 'store']);
+    Route::get('subpedidos/notas/list', [ProveedorNotaController::class, 'index']);
+    Route::get('subpedidos/notas/show/{id}', [ProveedorNotaController::class, 'show']);
+    Route::put('subpedidos/notas/update/{id}', [ProveedorNotaController::class, 'update']);
+    Route::delete('subpedidos/notas/{id}', [ProveedorNotaController::class, 'destroy']);
+
+    //Remito
+    Route::post('remitos/create', [RemitoController::class, 'store']);
+    Route::get('remitos/list', [RemitoController::class, 'index']);
+    Route::get('remitos/show/{id}', [RemitoController::class, 'show']);
+    Route::put('remitos/update/{id}', [RemitoController::class, 'update']);
+    Route::delete('remitos/{id}', [RemitoController::class, 'destroy']);
 });
 
 

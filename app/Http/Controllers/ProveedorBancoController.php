@@ -52,6 +52,7 @@ class ProveedorBancoController extends Controller
             'status' => 'success',
             'code' => 201,
             'message' => 'Banco creado correctamente',
+            'banco' => $banco,
         ];
         return response()->json($data);
     }

@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\EmpresaBancoController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemSubpedidoController;
+use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProveedorBancoController;
 use App\Http\Controllers\ProveedorController;
@@ -157,6 +159,31 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('remitos/show/{id}', [RemitoController::class, 'show']);
     Route::put('remitos/update/{id}', [RemitoController::class, 'update']);
     Route::delete('remitos/{id}', [RemitoController::class, 'destroy']);
+
+    //Factura
+    Route::post('facturas/create', [FacturaController::class, 'store']);
+    Route::get('facturas/list', [FacturaController::class, 'index']);
+    Route::get('facturas/show/{id}', [FacturaController::class, 'show']);
+    Route::put('facturas/update/{id}', [FacturaController::class, 'update']);
+    Route::delete('facturas/{id}', [FacturaController::class, 'destroy']);
+    Route::get('facturas/subpedido/{id}', [FacturaController::class, 'getSubPedidoByFactura']);
+
+    //Pago
+    Route::post('pagos/create', [PagoController::class, 'store']);
+    Route::get('pagos/list', [PagoController::class, 'index']);
+    Route::get('pagos/show/{id}', [PagoController::class, 'show']);
+    Route::put('pagos/update/{id}', [PagoController::class, 'update']);
+    Route::delete('pagos/{id}', [PagoController::class, 'destroy']);
+    Route::get('pagos/factura/{id}', [PagoController::class, 'shogetFacturaByPagow']);
+    Route::get('pagos/cheques/{id}', [PagoController::class, 'getChequesByPago']);
+
+    //Cheques
+    Route::post('cheques/create', [PagoController::class, 'store']);
+    Route::get('cheques/list', [PagoController::class, 'index']);
+    Route::get('cheques/show/{id}', [PagoController::class, 'show']);
+    Route::put('cheques/update/{id}', [PagoController::class, 'update']);
+    Route::delete('cheques/{id}', [PagoController::class, 'destroy']);
+    Route::get('cheques/pago/{id}', [PagoController::class, 'getPagoByCheque']);
 });
 
 

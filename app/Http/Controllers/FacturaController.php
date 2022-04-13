@@ -36,7 +36,7 @@ class FacturaController extends Controller
             'nota' => 'string|max:100',
             'fecha' => 'date',
             'importe' => 'numeric',
-            'archivo' => 'required|string|max:100',
+            'archivo' => 'required|mimes:png,jpg,jpeg,pdf|max:10240',
         ]);
         $factura = new Factura();
         $factura->subPedido_id = $request->subPedido_id;
@@ -84,7 +84,7 @@ class FacturaController extends Controller
             'nota' => 'string|max:100',
             'fecha' => 'date',
             'importe' => 'numeric',
-            'archivo' => 'required|string|max:100',
+            'archivo' => 'required|mimes:png,jpg,jpeg,pdf|max:10240',
         ]);
         $factura = Factura::find($id);
         if (is_object($factura)) {

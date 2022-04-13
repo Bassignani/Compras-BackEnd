@@ -35,7 +35,7 @@ class RemitoController extends Controller
             'num_remito' => 'required|string|max:255',
             'nota' => 'string|max:255',
             'fecha' => 'date',
-            'archivo' => 'string|max:255',
+            'archivo' => 'mimes:png,jpg,jpeg,pdf|max:10240',
         ]);
         $remito = new Remito(); 
         $remito->subPedido_id = $request->subPedido_id;
@@ -83,7 +83,7 @@ class RemitoController extends Controller
             'num_remito' => 'required|string|max:255',
             'nota' => 'string|max:255',
             'fecha' => 'date',
-            'archivo' => 'string|max:255',
+            'archivo' => 'mimes:png,jpg,jpeg,pdf|max:10240',
         ]);
         $remito = Remito::find($id);
         if (is_object($remito)) {

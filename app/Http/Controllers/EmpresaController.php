@@ -8,6 +8,22 @@ use Illuminate\Http\Request;
 class EmpresaController extends Controller
 {
 
+   
+
+    private function rules(){
+        return [
+            'nombre' => 'required|string|max:100', 
+            'cuit' => 'required|string|max:100',
+            'direccion' => 'string|max:255',
+            'razon_social' => 'string|max:255',
+            'telefono2' => 'string|max:255',
+            'telefono1' => 'string|max:255',
+            'path_img'  => 'mimes:png,jpg,jpeg,pdf|max:10240',
+            'codigo'    => 'string|max:255',
+        ];
+    }
+    
+
     public function index()
     {
         $empresas = Empresa::all();
@@ -30,16 +46,7 @@ class EmpresaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'cuit' => 'required|string|max:100',
-            'razon_social' => 'string|max:255',
-            'direccion' => 'string|max:255',
-            'telefono1' => 'string|max:255',
-            'telefono2' => 'string|max:255',
-            'codigo'    => 'string|max:255',
-            'path_img'  => 'string|max:255',
-        ]);  
+        $request->validate($this->rules());  
         $empresa = new Empresa();
         $empresa->nombre = $request->nombre;
         $empresa->cuit = $request->cuit;
@@ -48,7 +55,11 @@ class EmpresaController extends Controller
         $empresa->telefono1 = $request->telefono1;
         $empresa->telefono2 = $request->telefono2;
         $empresa->codigo = $request->codigo;
-        $empresa->path_img = $request->path_img;
+        if(isset($request->path_img)){
+            $path_img = $request->path_img->getClientOriginalName().time().".".$request->path_img->extension();
+            $request->path_img->mave(public_path("image/empresas"), $path_img);
+            $empresa->path_img = $path_img;
+        }
         $empresa->save();
         $data = [
             'status' => 'success',
@@ -82,27 +93,10 @@ class EmpresaController extends Controller
 
     public function update(Request $request,$id)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'cuit' => 'required|string|max:100',
-            'razon_social' => 'string|max:255',
-            'direccion' => 'string|max:255',
-            'telefono1' => 'string|max:255',
-            'telefono2' => 'string|max:255',
-            'codigo'    => 'string|max:255',
-            'path_img'  => 'string|max:255',
-        ]);  
+        $dataValidated = $request->validate($this->rules());  
         $empresa = Empresa::find($id);
         if (is_object($empresa)) {
-            $empresa->nombre = $request->nombre;
-            $empresa->cuit = $request->cuit;
-            $empresa->razon_social = $request->razon_social;
-            $empresa->direccion = $request->direccion;
-            $empresa->telefono1 = $request->telefono1;
-            $empresa->telefono2 = $request->telefono2;
-            $empresa->codigo = $request->codigo;
-            $empresa->path_img = $request->path_img;
-            $empresa->save();
+            $empresa->update($dataValidated);
             $data = array(
                 'status' => 'success',
                 'code' => 200,
@@ -114,9 +108,10 @@ class EmpresaController extends Controller
                 'code' => 404,
                 'message' => 'Empresa no encontrada',
             );
-        }
+        }   
         return response()->json($data);
     }
+
 
 
     public function getEmpresaByName($nombre){

@@ -62,8 +62,9 @@ class UserController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Usuario logueado correctamente',
-                    'access_token' => $token,
                     'token_type' => 'Bearer',
+                    'access_token' => $token,
+                    'user' => $user,
                 );
             }else{
                 $data = array(
